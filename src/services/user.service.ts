@@ -2,8 +2,6 @@ import { User, UserInfo } from "../models/user.model";
 
 export class UserService {
   public static async login({ email, password }: UserInfo) {
-    console.log(email);
-
     try {
       const result = await User.findOne(
         {
@@ -22,14 +20,14 @@ export class UserService {
   }
 
   public static async insertUser({ email, name, password }: UserInfo) {
-    const NewUser = new User({
+    const newUser = new User({
       email,
       name,
       password,
     });
 
     try {
-      await NewUser.save();
+      await newUser.save();
 
       return true;
     } catch (e) {
