@@ -1,6 +1,10 @@
 import { Post, PostInfo } from "../models/post.model";
 import { Station, StationInfo } from "../models/station.model";
 
+interface Page {
+  page: number;
+}
+
 export class PostService {
   public static async writePost(post: PostInfo) {
     // 1. 글 작성
@@ -31,5 +35,19 @@ export class PostService {
 
         return false;
       });
+  }
+
+  public static async getPostsByPage({ page }: Page) {
+    const posts = [];
+
+    for (let i = 1; i <= 10; i++) {
+      posts.push({
+        title: `Title ${(page - 1) * 10 + i}`,
+        content: `content ${(page - 1) * 10 + i}`,
+        id: `${(page - 1) * 10 + i}`,
+      });
+    }
+
+    return posts;
   }
 }

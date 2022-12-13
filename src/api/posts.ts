@@ -24,4 +24,12 @@ router.post("/write", async (req: Request, res: Response) => {
   res.status(200).json(result);
 });
 
+router.get("/:page", async (req: Request, res: Response) => {
+  const page = +req.params.page;
+
+  const result = await PostService.getPostsByPage({ page });
+
+  res.status(200).json(result);
+});
+
 export default router;
