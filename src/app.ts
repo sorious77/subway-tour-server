@@ -28,10 +28,16 @@ app.listen(port, () => {
 
 const DB_URI = process.env.DB_URI;
 
-mongoose.connect(DB_URI!, (err) => {
-  if (err) {
-    console.error(err);
-  } else {
-    console.log("DB Connected");
+mongoose.connect(
+  DB_URI!,
+  {
+    dbName: `${process.env.DB_NAME}`,
+  },
+  (err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log("DB Connected");
+    }
   }
-});
+);
