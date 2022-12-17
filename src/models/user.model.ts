@@ -3,7 +3,7 @@ import { Schema, model } from "mongoose";
 interface UserInfo {
   email: string;
   password: string;
-  name?: string;
+  nickname?: string;
 }
 
 const userSchema: Schema = new Schema({
@@ -17,7 +17,7 @@ const userSchema: Schema = new Schema({
     required: true,
     trim: true,
   },
-  name: {
+  nickname: {
     type: String,
     required: true,
   },

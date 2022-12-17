@@ -8,21 +8,19 @@ export class UserService {
           email,
           password,
         },
-        { email: 1, name: 1, _id: 0 }
+        { email: 1, nickname: 1, _id: 0 }
       );
 
       return result;
     } catch (e) {
-      console.log(e);
-
       return {};
     }
   }
 
-  public static async insertUser({ email, name, password }: UserInfo) {
+  public static async insertUser({ email, nickname, password }: UserInfo) {
     const newUser = new User({
       email,
-      name,
+      nickname,
       password,
     });
 
@@ -31,7 +29,6 @@ export class UserService {
 
       return true;
     } catch (e) {
-      console.log(e);
       return false;
     }
   }
@@ -40,7 +37,6 @@ export class UserService {
     try {
       const result = await User.find({});
 
-      console.log(result);
       return result;
     } catch (e) {
       console.error(e);

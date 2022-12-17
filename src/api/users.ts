@@ -16,11 +16,11 @@ router.post("/login", async (req: Request, res: Response) => {
 
 router.post("/register", async (req: Request, res: Response) => {
   const {
-    body: { email, name, password },
+    body: { email, nickname, password },
   } = req;
 
   // TODO Encryption
-  const result = await UserService.insertUser({ email, name, password });
+  const result = await UserService.insertUser({ email, nickname, password });
 
   if (result) {
     res.status(200).json({ success: "회원가입에 성공했습니다." });
