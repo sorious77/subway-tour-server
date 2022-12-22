@@ -1,22 +1,27 @@
 import { Schema, model } from "mongoose";
 
 interface StationInfo {
-  station_nm: string;
-  station_nm_eng: string;
-  visited: boolean;
+  name: string;
+  code: number;
+  lat: number;
+  lng: number;
 }
 
 const stationSchema: Schema = new Schema({
-  station_nm: {
+  name: {
     type: String,
     required: true,
   },
-  station_nm_eng: {
-    type: String,
+  code: {
+    type: Number,
     required: true,
   },
-  visited: {
-    type: Boolean,
+  lat: {
+    type: Number,
+    required: true,
+  },
+  lng: {
+    type: Number,
     required: true,
   },
 });

@@ -3,13 +3,9 @@ import initInfo from "./init.json";
 
 export class StationService {
   public static async init() {
-    const addVisited = initInfo.map((station) => {
-      return { ...station, visited: false };
-    });
-
     try {
       await Station.deleteMany({});
-      await Station.insertMany(addVisited);
+      await Station.insertMany(initInfo);
 
       return true;
     } catch (error) {
@@ -20,9 +16,7 @@ export class StationService {
   public static async getRandomStation() {
     try {
       const result = await Station.find(
-        {
-          visited: false,
-        },
+        {},
         {
           station_nm: 1,
           station_nm_eng: 1,
