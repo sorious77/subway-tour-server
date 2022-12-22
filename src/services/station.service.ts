@@ -18,8 +18,11 @@ export class StationService {
       const result = await Station.find(
         {},
         {
-          station_nm: 1,
-          station_nm_eng: 1,
+          name: 1,
+          code: 1,
+          lat: 1,
+          lng: 1,
+          line: 1,
           _id: 0,
         }
       );
@@ -37,8 +40,11 @@ export class StationService {
       const result = await Station.find(
         {},
         {
-          station_nm: 1,
-          station_nm_eng: 1,
+          name: 1,
+          code: 1,
+          lat: 1,
+          lng: 1,
+          line: 1,
           _id: 0,
         }
       );
