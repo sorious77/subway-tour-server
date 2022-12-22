@@ -5,6 +5,7 @@ interface StationInfo {
   code: number;
   lat: number;
   lng: number;
+  line: string;
 }
 
 const stationSchema: Schema = new Schema({
@@ -22,6 +23,10 @@ const stationSchema: Schema = new Schema({
   },
   lng: {
     type: Number,
+    required: true,
+  },
+  line: {
+    type: String,
     required: true,
   },
 });
