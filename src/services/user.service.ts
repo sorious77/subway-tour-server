@@ -17,7 +17,7 @@ export class UserService {
     }
   }
 
-  public static async insertUser({ email, nickname, password }: UserInfo) {
+  public static async register({ email, nickname, password }: UserInfo) {
     const newUser = new User({
       email,
       nickname,
@@ -33,13 +33,28 @@ export class UserService {
     }
   }
 
+  public static async update({ email, nickname, password }: UserInfo) {
+    try {
+      const user = await User.findOne({ email, password });
+
+      if (!user) {
+        return false;
+      }
+
+      await User.findOneAndUpdate({ email }, { nickname, password });
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   public static async findUsers() {
     try {
       const result = await User.find({});
 
       return result;
     } catch (e) {
-      console.error(e);
       return false;
     }
   }

@@ -19,8 +19,6 @@ router.post("/write", async (req: Request, res: Response) => {
 
   const result = await PostService.writePost(newPost);
 
-  console.log(result);
-
   res.status(200).json(result);
 });
 

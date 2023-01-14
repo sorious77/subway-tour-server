@@ -20,8 +20,6 @@ export class PostService {
         });
       })
       .then((station) => {
-        console.log("station", station);
-
         return Station.updateOne({
           station_nm: station!.station_nm,
           visited: true,
@@ -31,8 +29,6 @@ export class PostService {
         return true;
       })
       .catch((e) => {
-        console.log(e);
-
         return false;
       });
   }
