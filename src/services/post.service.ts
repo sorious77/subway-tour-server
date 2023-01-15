@@ -1,5 +1,4 @@
 import { Post, PostInfo } from "../models/post.model";
-import { Station, StationInfo } from "../models/station.model";
 
 interface Page {
   page: number;
@@ -7,43 +6,44 @@ interface Page {
 
 export class PostService {
   public static async writePost(post: PostInfo) {
-    // 1. 글 작성
-    // 2. 지하철역 상태 업데이트
+    console.log(post);
 
     const newPost = new Post(post);
 
-    newPost
-      .save()
-      .then(() => {
-        return Station.findOne({
-          station_nm: post.station_nm,
-        });
-      })
-      .then((station) => {
-        return Station.updateOne({
-          station_nm: station!.station_nm,
-          visited: true,
-        });
-      })
-      .then(() => {
-        return true;
-      })
-      .catch((e) => {
-        return false;
-      });
+    try {
+      await newPost.save();
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
-  public static async getPostsByPage({ page }: Page) {
-    const posts = [];
+  public static async getPostById(id: string) {}
 
-    for (let i = 1; i <= 10; i++) {
-      posts.push({
-        title: `Title ${(page - 1) * 10 + i}`,
-        content: `content ${(page - 1) * 10 + i}`,
-        id: `${(page - 1) * 10 + i}`,
-      });
+  public static async getPostsByPage(page: number) {
+    try {
+      const count = await Post.count({});
+      const posts = await Post.find(
+        {},
+        {
+          _id: 1,
+          title: 1,
+          station_nm: 1,
+          visitedAt: 1,
+          content: 1,
+          author: 1,
+          createdAt: 1,
+        }
+      )
+        .sort({ createdAt: 1 })
+        .limit(10);
+
+      return {
+        count,
+        posts,
+      };
+    } catch (e) {
+      throw new Error("게시글 조회에 실패했습니다.");
     }
-
-    return posts;
   }
 }

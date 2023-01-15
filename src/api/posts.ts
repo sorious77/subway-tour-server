@@ -19,13 +19,14 @@ router.post("/write", async (req: Request, res: Response) => {
 
   const result = await PostService.writePost(newPost);
 
-  res.status(200).json(result);
+  if (result) res.status(200).json({ success: "글 작성에 성공했습니다." });
+  else res.status(404).json({ error: "글 작성에 실패했습니다." });
 });
 
 router.get("/:page", async (req: Request, res: Response) => {
   const page = +req.params.page;
 
-  const result = await PostService.getPostsByPage({ page });
+  const result = await PostService.getPostsByPage(page);
 
   res.status(200).json(result);
 });

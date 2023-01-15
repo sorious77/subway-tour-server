@@ -3,7 +3,7 @@ import { User, UserInfo } from "../models/user.model";
 export class UserService {
   public static async login({ email, password }: UserInfo) {
     try {
-      const result = await User.findOne(
+      const user = await User.findOne(
         {
           email,
           password,
@@ -11,7 +11,7 @@ export class UserService {
         { email: 1, nickname: 1, _id: 0 }
       );
 
-      return result;
+      return user;
     } catch (e) {
       return {};
     }
