@@ -23,12 +23,15 @@ router.post("/write", async (req: Request, res: Response) => {
   else res.status(404).json({ error: "글 작성에 실패했습니다." });
 });
 
-router.get("/:page", async (req: Request, res: Response) => {
-  const page = +req.params.page;
+router.get("/:id", async (req: Request, res: Response) => {
+  const id = req.params.id;
 
-  const result = await PostService.getPostsByPage(page);
-
-  res.status(200).json(result);
+  try {
+    const result = await PostService.getPostById(id);
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(404).json({ error: "게시글 조회에 실패했습니다." });
+  }
 });
 
 export default router;

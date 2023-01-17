@@ -18,7 +18,29 @@ export class PostService {
     }
   }
 
-  public static async getPostById(id: string) {}
+  public static async getPostById(_id: string) {
+    try {
+      const post = await Post.findOne(
+        {
+          _id,
+        },
+        {
+          title: 1,
+          station_nm: 1,
+          visitedAt: 1,
+          content: 1,
+          author: 1,
+          createdAt: 1,
+        }
+      );
+
+      console.log(post);
+
+      return post;
+    } catch (e) {
+      throw new Error("게시글 조회에 실패했습니다.");
+    }
+  }
 
   public static async getPostsByPage(page: number) {
     try {
@@ -38,9 +60,13 @@ export class PostService {
         .sort({ createdAt: 1 })
         .limit(10);
 
+      const result = posts.map((post, idx) => {
+        return { ...post._doc, id: (page - 1) * 10 + idx + 1 };
+      });
+
       return {
         count,
-        posts,
+        posts: result,
       };
     } catch (e) {
       throw new Error("게시글 조회에 실패했습니다.");
