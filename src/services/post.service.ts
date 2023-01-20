@@ -6,13 +6,12 @@ interface Page {
 
 export class PostService {
   public static async writePost(post: PostInfo) {
-    console.log(post);
-
     const newPost = new Post(post);
 
     try {
-      await newPost.save();
-      return true;
+      const result = await newPost.save();
+
+      return {result, success : true};
     } catch (e) {
       return false;
     }

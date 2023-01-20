@@ -19,8 +19,8 @@ router.post("/write", async (req: Request, res: Response) => {
 
   const result = await PostService.writePost(newPost);
 
-  if (result) res.status(200).json({ success: "글 작성에 성공했습니다." });
-  else res.status(404).json({ error: "글 작성에 실패했습니다." });
+  if (result) res.status(200).json({ result });
+  else res.status(404).json({ success:false });
 });
 
 router.get("/:id", async (req: Request, res: Response) => {
