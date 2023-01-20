@@ -1,4 +1,5 @@
 import { Post, PostInfo } from "../models/post.model";
+import { UserService } from "./user.service";
 
 interface Page {
   page: number;
@@ -6,9 +7,13 @@ interface Page {
 
 export class PostService {
   public static async writePost(post: PostInfo) {
-    const newPost = new Post(post);
-
     try {
+      const user = await UserService.findUserByEmail(post.author);
+
+      if (!user) throw new Error("");
+
+      const newPost = new Post({ ...post, user: user._id });
+
       const { _doc: result } = await newPost.save();
 
       return { ...result, success: true };
@@ -28,12 +33,9 @@ export class PostService {
           station_nm: 1,
           visitedAt: 1,
           content: 1,
-          author: 1,
           createdAt: 1,
         }
-      );
-
-      console.log(post);
+      ).populate("user", "nickname");
 
       return post;
     } catch (e) {

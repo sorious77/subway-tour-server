@@ -28,6 +28,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 
   try {
     const result = await PostService.getPostById(id);
+
     res.status(200).json(result);
   } catch (e) {
     res.status(404).json({ error: "게시글 조회에 실패했습니다." });

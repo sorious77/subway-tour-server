@@ -1,6 +1,18 @@
 import { User, UserInfo } from "../models/user.model";
 
 export class UserService {
+  public static async findUserByEmail(email: string) {
+    try {
+      const user = await User.findOne({
+        email,
+      });
+
+      return user;
+    } catch (e) {
+      return null;
+    }
+  }
+
   public static async login({ email, password }: UserInfo) {
     try {
       const user = await User.findOne(
