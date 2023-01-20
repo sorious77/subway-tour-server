@@ -9,9 +9,9 @@ export class PostService {
     const newPost = new Post(post);
 
     try {
-      const result = await newPost.save();
+      const { _doc: result } = await newPost.save();
 
-      return {result, success : true};
+      return { ...result, success: true };
     } catch (e) {
       return false;
     }
@@ -58,6 +58,13 @@ export class PostService {
       )
         .sort({ createdAt: 1 })
         .limit(10);
+
+      if (posts.length === 0) {
+        return {
+          count: 0,
+          posts: [],
+        };
+      }
 
       const result = posts.map((post, idx) => {
         return { ...post._doc, id: (page - 1) * 10 + idx + 1 };

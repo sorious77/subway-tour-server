@@ -19,8 +19,8 @@ router.post("/write", async (req: Request, res: Response) => {
 
   const result = await PostService.writePost(newPost);
 
-  if (result) res.status(200).json({ result });
-  else res.status(404).json({ success:false });
+  if (result) res.status(200).json(result);
+  else res.status(404).json({ success: false });
 });
 
 router.get("/:id", async (req: Request, res: Response) => {
