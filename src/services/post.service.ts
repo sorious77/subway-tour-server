@@ -1,4 +1,5 @@
-import { Post, PostInfo } from "../models/post.model";
+import { PostInfo } from "../models/post.model";
+import { Post } from "../models";
 import { UserService } from "./user.service";
 
 interface Page {

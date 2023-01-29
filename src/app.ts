@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import cors from "cors";
 import api from "./api";
-import mongoose from "mongoose";
 import bodyParser from "body-parser";
 
 dotenv.config();
@@ -25,19 +24,3 @@ const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`[server]:  🚀 Server is running at https://localhost:${port}`);
 });
-
-const DB_URI = process.env.DB_URI;
-
-mongoose.connect(
-  DB_URI!,
-  {
-    dbName: `${process.env.DB_NAME}`,
-  },
-  (err) => {
-    if (err) {
-      console.error("Failed DB Connect");
-    } else {
-      console.log("DB Connected");
-    }
-  }
-);

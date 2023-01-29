@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema } from "mongoose";
 
 interface PostInfo {
   title: string;
@@ -36,6 +36,4 @@ const postSchema: Schema = new Schema({
   },
 });
 
-const Post = model("Post", postSchema);
-
-export { Post, PostInfo };
+export { PostInfo, postSchema };
