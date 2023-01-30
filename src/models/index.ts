@@ -18,7 +18,7 @@ autoIncrement.initialize(connect);
 
 postSchema.plugin(autoIncrement.plugin, {
   model: "Post",
-  field: "seq",
+  field: "id",
   startAt: 1,
   increment: 1,
 });

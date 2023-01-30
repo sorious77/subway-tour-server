@@ -19,24 +19,31 @@ export class PostService {
 
       return { ...result, success: true };
     } catch (e) {
+      console.log(e);
+
       return false;
     }
   }
 
-  public static async getPostById(_id: string) {
+  public static async getPostById(id: number) {
     try {
       const post = await Post.findOne(
         {
-          _id,
+          id
         },
         {
+          _id: 0,
+          id: 1,
           title: 1,
           station_nm: 1,
           visitedAt: 1,
           content: 1,
           createdAt: 1,
         }
-      ).populate("user", "nickname");
+      ).populate({
+        path:"user",
+        select:"nickname -_id"
+      });
 
       return post;
     } catch (e) {
@@ -50,7 +57,8 @@ export class PostService {
       const posts = await Post.find(
         {},
         {
-          _id: 1,
+          _id: 0,
+          id: 1,
           title: 1,
           station_nm: 1,
           visitedAt: 1,
@@ -70,7 +78,7 @@ export class PostService {
       }
 
       const result = posts.map((post, idx) => {
-        return { ...post._doc, id: (page - 1) * 10 + idx + 1 };
+        return { ...post._doc };
       });
 
       return {

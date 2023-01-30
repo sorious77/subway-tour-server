@@ -27,7 +27,7 @@ router.get("/:id", async (req: Request, res: Response) => {
   const id = req.params.id;
 
   try {
-    const result = await PostService.getPostById(id);
+    const result = await PostService.getPostById(+id);
 
     res.status(200).json(result);
   } catch (e) {
