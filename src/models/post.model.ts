@@ -7,33 +7,38 @@ interface PostInfo {
   visitedAt: string;
   content: string;
   author?: string;
+  updatedAt?: Date;
 }
 
-const postSchema: Schema = new Schema({
-  title: {
-    type: String,
-    required: true,
+const postSchema: Schema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    station_nm: {
+      type: String,
+      require: true,
+    },
+    visitedAt: {
+      type: Date,
+      require: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  station_nm: {
-    type: String,
-    require: true,
-  },
-  visitedAt: {
-    type: Date,
-    require: true,
-  },
-  content: {
-    type: String,
-    required: true,
-  },
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-});
+  {
+    timestamps: {
+      createdAt: "createdAt",
+      updatedAt: "updatedAt",
+    },
+  }
+);
 
 export { PostInfo, postSchema };
