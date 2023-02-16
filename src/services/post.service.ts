@@ -9,7 +9,7 @@ interface Page {
 export class PostService {
   public static async writePost(post: PostInfo) {
     try {
-      const user = await UserService.findUserByEmail(post.author);
+      const user = await UserService.findUserByEmail(post.author!);
 
       if (!user) throw new Error("");
 
@@ -29,7 +29,7 @@ export class PostService {
     try {
       const post = await Post.findOne(
         {
-          id
+          id,
         },
         {
           _id: 0,
@@ -41,8 +41,8 @@ export class PostService {
           createdAt: 1,
         }
       ).populate({
-        path:"user",
-        select:"nickname -_id"
+        path: "user",
+        select: "nickname -_id",
       });
 
       return post;
@@ -51,6 +51,39 @@ export class PostService {
     }
   }
 
+  public static async deletePostById(id: number) {
+    try {
+      const result = await Post.deleteOne({
+        id,
+      });
+
+      return result;
+    } catch (e) {
+      throw new Error("게시글 삭제에 실패했습니다.");
+    }
+  }
+
+  public static async updatePostById(id: number, post: PostInfo) {
+    try {
+      const result = await Post.updateOne(
+        {
+          id,
+        },
+        {
+          title: post.title,
+          station_nm: post.station_nm,
+          visitedAt: post.visitedAt,
+          content: post.content,
+        }
+      );
+
+      return result;
+    } catch (e) {
+      throw new Error("게시글 수정에 실패했습니다.");
+    }
+  }
+
+  // TODO pagination
   public static async getPostsByPage(page: number) {
     try {
       const count = await Post.count({});

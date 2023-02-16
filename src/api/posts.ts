@@ -35,4 +35,33 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
+router.delete("/:id", async (req: Request, res: Response) => {
+  const id = +req.params.id;
+
+  try {
+    const result = await PostService.deletePostById(id);
+
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(404).json({ error: "게시글 삭제에 실패했습니다." });
+  }
+});
+
+router.patch("/:id", async (req: Request, res: Response) => {
+  const {
+    body: { title, station_nm, visitedAt, content },
+  } = req;
+
+  const id = +req.params.id;
+  const post = { title, station_nm, visitedAt, content };
+
+  try {
+    const result = await PostService.updatePostById(id, post);
+
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(404).json({ error: "게시글 수정에 실패했습니다.`" });
+  }
+});
+
 export default router;

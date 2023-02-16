@@ -6,7 +6,7 @@ interface PostInfo {
   station_nm: string;
   visitedAt: string;
   content: string;
-  author: string;
+  author?: string;
 }
 
 const postSchema: Schema = new Schema({
