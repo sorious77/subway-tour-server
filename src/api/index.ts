@@ -13,10 +13,14 @@ router.use("/stations", stations);
 router.use("/posts", posts);
 router.use("/lists", lists);
 
-const upload = multer({ dest: "uploads/" });
+const upload = multer({
+  dest: "uploads/",
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
 
-router.post("/thumbnail", upload.single("image"), async (req, res) => {
+router.post("/thumbnail", upload.any(), async (req, res) => {
   console.log("Received image:", req.file);
+
   res.json({ message: "Image uploaded successfully" });
 });
 
