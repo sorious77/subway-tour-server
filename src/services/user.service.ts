@@ -29,7 +29,28 @@ export class UserService {
     }
   }
 
-  public static async register({ email, nickname, password }: UserInfo) {
+  private static generateNickname() {
+    const prefixs = ["똑똑", "깔끔", "딩굴", "꼬질"];
+    const postfixs = ["레오", "구스", "메라"];
+
+    const randomNumber = Math.floor(Math.random() * 1000);
+
+    let number =
+      randomNumber < 10
+        ? `00${randomNumber}`
+        : randomNumber < 100
+        ? `0${randomNumber}`
+        : `${randomNumber}`;
+
+    const prefix = prefixs[Math.floor(Math.random() * prefixs.length)];
+    const postfix = postfixs[Math.floor(Math.random() * postfixs.length)];
+
+    return `${prefix}${postfix}${number}`;
+  }
+
+  public static async register({ email, password }: UserInfo) {
+    const nickname = UserService.generateNickname();
+
     const newUser = new User({
       email,
       nickname,
