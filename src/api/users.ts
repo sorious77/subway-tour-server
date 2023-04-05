@@ -22,19 +22,24 @@ router.post("/register", async (req: Request, res: Response) => {
   // TODO Encryption
   const result = await UserService.register({ email, nickname, password });
 
-  if (result) {
-    res.status(200);
+  if (result.success) {
+    res.status(200).json({ ...result });
   } else {
-    res.status(404).json({ error: "회원가입에 실패했습니다." });
+    res.status(404).json({ ...result });
   }
 });
 
 router.patch("/update", async (req: Request, res: Response) => {
   const {
-    body: { email, nickname, password },
+    body: { email, nickname, password, newPassword },
   } = req;
 
-  const result = await UserService.update({ email, nickname, password });
+  const result = await UserService.update({
+    email,
+    nickname,
+    password,
+    newPassword,
+  });
 
   if (result)
     res.status(200).json({ success: "회원 정보 수정에 성공했습니다." });

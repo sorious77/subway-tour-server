@@ -1,4 +1,5 @@
-import { User, UserInfo } from "../models/user.model";
+import { User, UserInfo, UserUpdateInfo } from "../models/user.model";
+import bcrypt from "bcrypt";
 
 export class UserService {
   public static async findUserByEmail(email: string) {
@@ -18,12 +19,24 @@ export class UserService {
       const user = await User.findOne(
         {
           email,
-          password,
         },
-        { email: 1, nickname: 1, _id: 0 }
+        { email: 1, nickname: 1, password: 1, _id: 0 }
       );
 
-      return user;
+      if (!user) {
+        return {};
+      }
+
+      const isCorrectpassword = await bcrypt.compare(password, user.password);
+
+      if (isCorrectpassword) {
+        return {
+          email: user.email,
+          nickname: user.nickname,
+        };
+      }
+
+      return {};
     } catch (e) {
       return {};
     }
@@ -48,25 +61,44 @@ export class UserService {
     return `${prefix}${postfix}${number}`;
   }
 
+  private static async encryptPassword(password: string) {
+    const saltRound = (process.env.SALT_ROUND && +process.env.SALT_ROUND) || 10;
+    const salt = await bcrypt.genSalt(saltRound);
+
+    return await bcrypt.hash(password, salt);
+  }
+
   public static async register({ email, password }: UserInfo) {
+    const isExistEmail = await this.findUserByEmail(email);
+    if (isExistEmail) {
+      return { error: true, message: "이미 존재하는 이메일입니다" };
+    }
+
     const nickname = UserService.generateNickname();
+    const hashedPassword = await this.encryptPassword(password);
 
     const newUser = new User({
       email,
       nickname,
-      password,
+      password: hashedPassword,
     });
 
     try {
       await newUser.save();
 
-      return true;
+      return { success: true };
     } catch (e) {
-      return false;
+      console.log(e);
+      return { error: true, message: "회원 가입에 실패했습니다" };
     }
   }
 
-  public static async update({ email, nickname, password }: UserInfo) {
+  public static async update({
+    email,
+    nickname,
+    password,
+    newPassword,
+  }: UserUpdateInfo) {
     try {
       const user = await User.findOne({ email, password });
 
@@ -74,7 +106,16 @@ export class UserService {
         return false;
       }
 
-      await User.findOneAndUpdate({ email }, { nickname, password });
+      const updateInfo = {
+        ...(nickname && { nickname }),
+        ...(newPassword && { newPassword }),
+      };
+
+      if (Object.keys(updateInfo).length === 0) {
+        return false;
+      }
+
+      await User.findOneAndUpdate({ email }, { ...updateInfo });
 
       return true;
     } catch (e) {

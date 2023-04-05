@@ -6,6 +6,13 @@ interface UserInfo {
   nickname?: string;
 }
 
+interface UserUpdateInfo {
+  email: string;
+  password: string;
+  nickname: string;
+  newPassword?: string;
+}
+
 const userSchema: Schema = new Schema({
   email: {
     type: String,
@@ -25,4 +32,4 @@ const userSchema: Schema = new Schema({
 
 const User = model("User", userSchema);
 
-export { User, UserInfo };
+export { User, UserInfo, UserUpdateInfo };
