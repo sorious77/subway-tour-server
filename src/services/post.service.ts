@@ -84,11 +84,14 @@ export class PostService {
   }
 
   // TODO pagination
-  public static async getPostsByPage(page: number) {
+  public static async getPostsByPage(lastPostId: number) {
     try {
       const count = await Post.count({});
       const posts = await Post.find(
-        {},
+        {
+          // await MyModel.find({ name: 'john', age: { $gte: 18 } }).exec();
+          id: { $gt: lastPostId },
+        },
         {
           _id: 0,
           id: 1,
@@ -100,7 +103,7 @@ export class PostService {
           createdAt: 1,
         }
       )
-        .sort({ createdAt: 1 })
+        .sort({ id: 1 })
         .limit(10);
 
       if (posts.length === 0) {
