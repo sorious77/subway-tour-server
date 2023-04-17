@@ -89,7 +89,6 @@ export class PostService {
       const count = await Post.count({});
       const posts = await Post.find(
         {
-          // await MyModel.find({ name: 'john', age: { $gte: 18 } }).exec();
           id: { $gt: lastPostId },
         },
         {
@@ -99,12 +98,15 @@ export class PostService {
           station_nm: 1,
           visitedAt: 1,
           content: 1,
-          author: 1,
           createdAt: 1,
         }
       )
         .sort({ id: 1 })
-        .limit(10);
+        .limit(10)
+        .populate({
+          path: "user",
+          select: "nickname -_id",
+        });
 
       if (posts.length === 0) {
         return {
