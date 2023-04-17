@@ -4,10 +4,10 @@ import { PostService } from "../services/post.service";
 
 const router = Router();
 
-router.get("/:page", async (req: Request, res: Response) => {
-  const page = +req.params.page;
+router.get("/:lastPostId", async (req: Request, res: Response) => {
+  const lastPostId = +req.params.lastPostId;
 
-  const result = await PostService.getPostsByPage(page);
+  const result = await PostService.getPostsByPage(lastPostId);
 
   res.status(200).json(result);
 });
