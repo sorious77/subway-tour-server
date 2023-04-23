@@ -89,7 +89,7 @@ export class PostService {
       const count = await Post.count({});
       const posts = await Post.find(
         {
-          id: { $gt: lastPostId },
+          id: { $lt: lastPostId },
         },
         {
           _id: 0,
@@ -101,7 +101,7 @@ export class PostService {
           createdAt: 1,
         }
       )
-        .sort({ id: 1 })
+        .sort({ id: -1 })
         .limit(10)
         .populate({
           path: "user",
