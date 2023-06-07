@@ -65,7 +65,7 @@ export class PostService {
 
   public static async updatePostById(id: number, post: PostInfo) {
     try {
-      const result = await Post.updateOne(
+      await Post.updateOne(
         {
           id,
         },
@@ -77,20 +77,19 @@ export class PostService {
         }
       );
 
-      return result;
+      return { ...post, id };
     } catch (e) {
       throw new Error("게시글 수정에 실패했습니다.");
     }
   }
 
-  // TODO pagination
-  public static async getPostsByPage(lastPostId: number) {
+  public static async getPostsByPage(page: number) {
+    if (page <= 0) throw new Error("게시글 조회에 실패했습니다.");
+
     try {
       const count = await Post.count({});
       const posts = await Post.find(
-        {
-          id: { $lt: lastPostId },
-        },
+        {},
         {
           _id: 0,
           id: 1,
@@ -103,6 +102,7 @@ export class PostService {
       )
         .sort({ id: -1 })
         .limit(10)
+        .skip((page - 1) * 10)
         .populate({
           path: "user",
           select: "nickname -_id",
@@ -120,7 +120,7 @@ export class PostService {
       });
 
       return {
-        count,
+        totalPage: Math.ceil(count / 10),
         posts: result,
       };
     } catch (e) {
