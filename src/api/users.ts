@@ -8,7 +8,6 @@ router.post("/login", async (req: Request, res: Response) => {
     body: { email, password },
   } = req;
 
-  // TODO Decryption
   const result = await UserService.login({ email, password });
 
   res.status(200).json(result);
@@ -19,7 +18,6 @@ router.post("/register", async (req: Request, res: Response) => {
     body: { email, nickname, password },
   } = req;
 
-  // TODO Encryption
   const result = await UserService.register({ email, nickname, password });
 
   if (result.success) {
