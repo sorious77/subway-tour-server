@@ -2,10 +2,6 @@ import { PostInfo } from "../models/post.model";
 import { Post } from "../models";
 import { UserService } from "./user.service";
 
-interface Page {
-  page: number;
-}
-
 export class PostService {
   public static async writePost(post: PostInfo) {
     try {
@@ -108,6 +104,60 @@ export class PostService {
           select: "nickname -_id",
         });
 
+      if (posts.length === 0) {
+        return {
+          count: 0,
+          posts: [],
+        };
+      }
+
+      const result = posts.map((post, idx) => {
+        return { ...post._doc };
+      });
+
+      return {
+        totalPage: Math.ceil(count / 10),
+        posts: result,
+      };
+    } catch (e) {
+      throw new Error("게시글 조회에 실패했습니다.");
+    }
+  }
+
+  public static async getPostByPageAndEmail({
+    page,
+    email,
+  }: {
+    page: number;
+    email: string;
+  }) {
+    if (page <= 0) throw new Error("게시글 조회에 실패했습니다.");
+
+    const user = await UserService.findUserIdByEmail(email);
+
+    try {
+      const count = await Post.count({});
+      const posts = await Post.find(
+        {
+          user: user._id,
+        },
+        {
+          _id: 0,
+          id: 1,
+          title: 1,
+          station_nm: 1,
+          visitedAt: 1,
+          content: 1,
+          createdAt: 1,
+        }
+      )
+        .sort({ id: -1 })
+        .limit(10)
+        .skip((page - 1) * 10)
+        .populate({
+          path: "user",
+          select: "nickname -_id",
+        });
       if (posts.length === 0) {
         return {
           count: 0,

@@ -132,4 +132,21 @@ export class UserService {
       return false;
     }
   }
+
+  public static async findUserIdByEmail(email: string) {
+    try {
+      const user = await User.findOne(
+        {
+          email,
+        },
+        { email: 0, nickname: 0, password: 0, _id: 1 }
+      );
+
+      if (!user) throw new Error("존재하지 않는 이메일 정보입니다.");
+
+      return user;
+    } catch (e) {
+      throw new Error("존재하지 않는 이메일 정보입니다.");
+    }
+  }
 }
